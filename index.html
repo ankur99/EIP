@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Chivo:400,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script></script>
+  </head>
+  <body>
+    <div id="exit-alert" class="exit-alert-modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="form-box">
+          <h2>GET $10 OFF WHEN YOU SIGN UP FOR</h2>
+          <p class="header">SAVINGS,NEWS,UPDATES AND MORE</p>
+
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="your name"
+          />
+          <p class="error">plase enter email</p>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="email address"
+          />
+          <p class="error">please check this box</p>
+          <input
+            type="checkbox"
+            name="newsletter_check"
+            id="newsletter_check"
+          />
+          <label for="newsletter_check">
+            &nbsp; &nbsp;Check this box to recieve monthly newsletter</label
+          ><br />
+          <button class="submit-button" type="submit">SIGN UP</button>
+          <a class="text-center" href="#">PRIVACY POLICY</a>
+        </div>
+        <div class="illustration">
+          <img width="90%" src="https://i.ibb.co/7SJFygH/illustration.png" alt="illustration"/>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function setCookie(name, value, expires) {
+        document.cookie =
+          name +
+          "=" +
+          value +
+          (expires == null ? "" : ";expires=" + expires.toGMTString());
+      }
+
+      function getCookie(name) {
+        var cookieName = name + "=";
+        var docCookie = document.cookie;
+        var cookieStart;
+        var end;
+
+        if (docCookie.length > 0) {
+          cookieStart = docCookie.indexOf(cookieName);
+          if (cookieStart != -1) {
+            cookieStart = cookieStart + cookieName.length;
+            end = docCookie.indexOf(";", cookieStart);
+            if (end == -1) {
+              end = docCookie.length;
+            }
+            return unescape(docCookie.substring(cookieStart, end));
+          }
+        }
+        return false;
+      }
+
+      $(document).ready(function() {
+        // Desktop trigger
+        $("body").mouseleave(function() {
+          if (!getCookie("newsletter")) {
+            $("#exit-alert").css("display", "block");
+          }
+        });
+
+        // Mobile Trigger
+        setTimeout(function() {
+          if ($(window).width() <= 1024) {
+            if (!getCookie("newsletter")) {
+              $("#exit-alert").css("display", "block");
+            }
+          }
+        }, 5000);
+
+        $(".close-modal").click(function(){
+            $("#exit-alert").hide();
+            var value_array = " ";
+            var json_str = JSON.stringify(value_array);
+            var expirydate = new Date();
+            expirydate.setTime(expirydate.getTime() + 100 * 60 * 60 * 24 * 100);
+            setCookie("newsletter", json_str, expirydate);
+        });
+ 
+        // Read Data on button click
+        $("#exit-alert .submit-button").click(function() {
+          var name = $("#username").val();
+          var email = $("#email").val();
+          var newsletter = $("#newsletter_check").prop("checked");
+          if (!email.trim() || newsletter == false) {
+            $(".error").show('slow'); 
+          } else {
+            var value_array = [email, newsletter, name];
+            var json_str = JSON.stringify(value_array);
+            var expirydate = new Date();
+            expirydate.setTime(expirydate.getTime() + 100 * 60 * 60 * 24 * 100);
+            setCookie("newsletter", json_str, expirydate);
+            $("#exit-alert").css("display", "none");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
